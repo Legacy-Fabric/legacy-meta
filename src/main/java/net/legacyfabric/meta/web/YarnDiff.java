@@ -16,7 +16,10 @@
 
 package net.legacyfabric.meta.web;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -152,8 +155,8 @@ public class YarnDiff {
 
 				if (targetField == null) continue;
 
-				if (!Objects.equals(fieldMapping.getName(targetNamespace), targetField.getName(targetNamespace)) ||
-						!Objects.equals(fieldMapping.getDesc(targetNamespace), targetField.getDesc(targetNamespace))) {
+				if (!Objects.equals(fieldMapping.getName(targetNamespace), targetField.getName(targetNamespace))
+						|| !Objects.equals(fieldMapping.getDesc(targetNamespace), targetField.getDesc(targetNamespace))) {
 					diff.methods.add(new MappingsDiff.ClassEntry(
 							namedSource,
 							fieldMapping.getName(targetNamespace),
@@ -175,6 +178,7 @@ public class YarnDiff {
 
 		if (!Files.exists(path)) {
 			var url = String.format(getMappingsURL(), version.getVersion());
+
 			try {
 				FileUtils.copyURLToFile(new URL(url), path.toFile());
 			} catch (IOException e) {
@@ -184,8 +188,6 @@ public class YarnDiff {
 
 		return path;
 	}
-
-
 
 	private static String getMappingsURL() {
 		return LegacyReference.LOCAL_LEGACY_FABRIC_MAVEN_URL + "net/legacyfabric/yarn/%1$s/yarn-%1$s-tiny.gz";
