@@ -7,7 +7,7 @@ plugins {
     id "com.diffplug.spotless" version "6.23.3"
 }
 
-def legacyVersion = "1.10.0"
+def legacyVersion = "1.10.1"
 group 'net.legacyfabric'
 version '1.5.3'
 
@@ -63,6 +63,7 @@ jar {
 	}
 	from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 	duplicatesStrategy = DuplicatesStrategy.INCLUDE
+	exclude("META-INF/FABRIC1.*")
 }
 
 tasks.withType(JavaCompile).configureEach {
