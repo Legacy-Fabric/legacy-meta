@@ -1,16 +1,20 @@
+/*
+ * Copyright (c) 2025 Legacy Fabric
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package net.legacyfabric.meta.web;
-
-import io.javalin.http.Context;
-
-import net.fabricmc.mappingio.MappingReader;
-import net.fabricmc.mappingio.tree.MemoryMappingTree;
-import net.fabricmc.meta.FabricMeta;
-import net.fabricmc.meta.web.WebServer;
-import net.fabricmc.meta.web.models.MavenBuildGameVersion;
-
-import net.legacyfabric.meta.utils.LegacyReference;
-import net.legacyfabric.meta.web.models.MappingsDiff;
-import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.net.URL;
@@ -21,6 +25,18 @@ import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.zip.GZIPInputStream;
+
+import io.javalin.http.Context;
+import org.apache.commons.io.FileUtils;
+
+import net.fabricmc.mappingio.MappingReader;
+import net.fabricmc.mappingio.tree.MemoryMappingTree;
+import net.fabricmc.meta.FabricMeta;
+import net.fabricmc.meta.web.WebServer;
+import net.fabricmc.meta.web.models.MavenBuildGameVersion;
+
+import net.legacyfabric.meta.utils.LegacyReference;
+import net.legacyfabric.meta.web.models.MappingsDiff;
 
 public class YarnDiff {
 	private static final Path MAPPINGS_CACHE_DIR = Paths.get("metadata", "mappings");
