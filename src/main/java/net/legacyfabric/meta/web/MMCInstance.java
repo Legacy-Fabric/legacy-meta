@@ -30,12 +30,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import io.javalin.http.InternalServerErrorResponse;
-import net.legacyfabric.meta.utils.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
 import net.fabricmc.meta.web.EndpointsV2;
 import net.fabricmc.meta.web.models.LoaderInfoV2;
 
+import net.legacyfabric.meta.utils.IOUtils;
 import net.legacyfabric.meta.utils.LWJGLVersions;
 
 public class MMCInstance {
