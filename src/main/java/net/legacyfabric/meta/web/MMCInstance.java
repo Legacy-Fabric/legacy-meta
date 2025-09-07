@@ -30,6 +30,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import io.javalin.http.InternalServerErrorResponse;
+import net.legacyfabric.meta.utils.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
 import net.fabricmc.meta.web.EndpointsV2;
@@ -43,6 +44,7 @@ public class MMCInstance {
 
 	public static void setup() {
 		EndpointsV2.fileDownload("instance", "zip", MMCInstance::getZipFileName, MMCInstance::instanceZip);
+		IOUtils.emptyDir(CACHE_DIR);
 	}
 
 	private static String getZipFileName(LoaderInfoV2 infoV2) {
