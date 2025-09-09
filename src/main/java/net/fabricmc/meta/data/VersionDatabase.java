@@ -103,6 +103,8 @@ public class VersionDatabase {
 			return false;
 		});
 
+		launcherMeta.filterVersions(intermediary);
+
 		List<String> minecraftVersions = new ArrayList<>();
 
 		for (MavenVersion gameVersion : intermediary) {

@@ -40,6 +40,7 @@ import net.fabricmc.meta.utils.Reference;
 import net.fabricmc.meta.web.models.LoaderInfoV2;
 
 import net.legacyfabric.meta.utils.LegacyReference;
+import net.legacyfabric.meta.web.ProfileHelper;
 
 public class ProfileHandler {
 	private static final Executor EXECUTOR = Executors.newFixedThreadPool(2);
@@ -121,6 +122,8 @@ public class ProfileHandler {
 		if (librariesObject.has(side)) {
 			libraries.addAll(librariesObject.get(side).getAsJsonArray());
 		}
+
+		libraries.addAll(ProfileHelper.enrichProfile(info.getIntermediary().getVersion()));
 
 		String currentTime = ISO_8601.format(new Date());
 

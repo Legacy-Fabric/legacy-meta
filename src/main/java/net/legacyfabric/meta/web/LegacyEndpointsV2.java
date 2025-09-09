@@ -48,6 +48,10 @@ public class LegacyEndpointsV2 extends EndpointsV2 {
 
 		String gameVersion = context.pathParam("game_version");
 
+		return getVersionManifest(gameVersion);
+	}
+
+	public static String getVersionManifest(String gameVersion) {
 		MinecraftLauncherMeta.Version version = FabricMeta.database.launcherMeta.getVersions().stream()
 				.filter(v -> Objects.equals(v.getId(), gameVersion))
 				.findFirst().orElse(null);

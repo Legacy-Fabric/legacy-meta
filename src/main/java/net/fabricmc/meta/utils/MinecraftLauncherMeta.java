@@ -29,6 +29,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.io.IOUtils;
 
+import net.fabricmc.meta.web.models.MavenVersion;
+
 public class MinecraftLauncherMeta {
 	public static final Gson GSON = new GsonBuilder().create();
 
@@ -87,6 +89,18 @@ public class MinecraftLauncherMeta {
 		String url = "https://raw.githubusercontent.com/Legacy-Fabric/manifests/master/manifest.json";
 		String json = IOUtils.toString(new URL(url), StandardCharsets.UTF_8);
 		return GSON.fromJson(json, MinecraftLauncherMeta.class);
+	}
+
+	public void filterVersions(List<MavenVersion> intermediaries) {
+		versions.removeIf(version -> {
+			for (MavenVersion intermediary : intermediaries) {
+				if (version.id.equals(intermediary.getVersion())) {
+					return false;
+				}
+			}
+
+			return true;
+		});
 	}
 
 	public static class Version {
