@@ -18,7 +18,7 @@ package net.legacyfabric.meta.utils;
 
 public enum LWJGLVersions {
 	LWJGL3("LWJGL 3", "org.lwjgl3", "3.1.6"),
-	LWJGL2("LWJGL 2", "org.lwjgl", "2.9.4+legacyfabric.13");
+	LWJGL2("LWJGL 2", "org.lwjgl", "2.9.4+legacyfabric.14");
 
 	public final String name, uid, version;
 
