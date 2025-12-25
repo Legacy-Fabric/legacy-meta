@@ -46,7 +46,7 @@ public class ComparisonTests {
 	public static Stream<Arguments> provideEndpoints() {
 		return Stream.of(
 				// V1
-//				"/v1/versions",
+				//	"/v1/versions",
 				"/v1/versions/game",
 				"/v1/versions/game/1.13.2",
 				"/v1/versions/mappings",
@@ -56,7 +56,7 @@ public class ComparisonTests {
 				"/v1/versions/loader/1.8.9/0.15.2",
 
 				// V2
-//				"/v2/versions",
+				//	"/v2/versions",
 				"/v2/versions/game",
 				"/v2/versions/game/yarn",
 				"/v2/versions/game/intermediary",

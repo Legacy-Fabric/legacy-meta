@@ -119,7 +119,7 @@ public class MinecraftLauncherMeta {
 		public List<Version> versions;
 
 		public record Version(String id, String type, String url, String releaseTime, String sha1,
-							  String time) { }
+							String time) { }
 	}
 
 	public static MinecraftLauncherMeta getAllMeta(boolean allowCacheRead) throws IOException {
@@ -168,7 +168,7 @@ public class MinecraftLauncherMeta {
 	}
 
 	public record Version(String id, String type, String url, byte[] sha1, OffsetDateTime releaseTime, boolean obfuscated,
-						  OffsetDateTime time) {
+						OffsetDateTime time) {
 		public boolean isStable() {
 			return type.equals("release");
 		}
