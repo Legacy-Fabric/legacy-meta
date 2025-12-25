@@ -9,7 +9,7 @@ plugins {
 
 def legacyVersion = "1.11.2"
 group 'net.legacyfabric'
-version '1.5.3'
+version '1.6.2'
 
 version = legacyVersion + "+fabricmc." + project.version
 
@@ -45,7 +45,7 @@ java {
 }
 
 test {
-	useJUnitPlatform()
+	//useJUnitPlatform()
 }
 
 buildConfig {

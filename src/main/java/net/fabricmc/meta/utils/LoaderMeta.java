@@ -20,19 +20,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 
 import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
 
 import net.fabricmc.meta.web.WebServer;
-import net.fabricmc.meta.web.models.LoaderInfoBase;
+import net.fabricmc.meta.web.models.MavenBuildVersion;
 
 public class LoaderMeta {
 	public static final File BASE_DIR = new File("metadata");
 
-	public static JsonObject getMeta(LoaderInfoBase loaderInfo) {
-		String loaderMaven = loaderInfo.getLoader().getMaven();
+	public static synchronized JsonObject getMeta(MavenBuildVersion loader) {
+		String loaderMaven = loader.getMaven();
 		String[] split = loaderMaven.split(":");
 		String path = String.format("%s/%s/%s", split[0].replaceAll("\\.", "/"), split[1], split[2]);
 		String filename = String.format("%s-%s.json", split[1], split[2]);
@@ -43,7 +43,7 @@ public class LoaderMeta {
 			try {
 				String url = String.format("%s%s/%s", Reference.LOCAL_FABRIC_MAVEN_URL, path, filename);
 				System.out.println("Downloading " + url);
-				FileUtils.copyURLToFile(new URL(url), launcherMetaFile);
+				FileUtils.copyURLToFile(URI.create(url).toURL(), launcherMetaFile);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return null;
