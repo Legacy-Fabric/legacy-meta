@@ -62,7 +62,7 @@ public class YarnDiff {
 		String sourceMappings = context.pathParam("source_mappings");
 		String targetMappings = context.pathParam("target_mappings");
 
-		var mappings = FabricMeta.database.mappings;
+		var mappings = FabricMeta.database.yarns;
 		var source = mappings.stream().filter(t -> t.getVersion().equals(sourceMappings)).findFirst().orElse(null);
 		var target = mappings.stream().filter(t -> t.getVersion().equals(targetMappings)).findFirst().orElse(null);
 

@@ -17,7 +17,7 @@
 package net.legacyfabric.meta.web;
 
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
@@ -53,14 +53,14 @@ public class LegacyEndpointsV2 extends EndpointsV2 {
 
 	public static String getVersionManifest(String gameVersion) {
 		MinecraftLauncherMeta.Version version = FabricMeta.database.launcherMeta.getVersions().stream()
-				.filter(v -> Objects.equals(v.getId(), gameVersion))
+				.filter(v -> Objects.equals(v.id(), gameVersion))
 				.findFirst().orElse(null);
 
 		String json = null;
 
 		if (version != null) {
 			try {
-				json = IOUtils.toString(new URL(version.getUrl()), StandardCharsets.UTF_8);
+				json = IOUtils.toString(URI.create(version.url()), StandardCharsets.UTF_8);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

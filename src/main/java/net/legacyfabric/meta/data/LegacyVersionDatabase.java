@@ -23,10 +23,13 @@ import java.util.stream.Collectors;
 import net.fabricmc.meta.data.VersionDatabase;
 import net.fabricmc.meta.utils.PomParser;
 import net.fabricmc.meta.web.models.BaseVersion;
+import net.fabricmc.meta.web.models.LegacyDbDump;
 import net.fabricmc.meta.web.models.MavenBuildVersion;
 import net.fabricmc.meta.web.models.MavenUrlVersion;
 
 import net.legacyfabric.meta.utils.LegacyReference;
+import net.legacyfabric.meta.web.models.LFLegacyDbDump;
+import net.legacyfabric.meta.web.models.LegacyManifestDump;
 import net.legacyfabric.meta.web.models.LegacyMavenUrlVersion;
 
 public class LegacyVersionDatabase extends VersionDatabase {
@@ -65,6 +68,18 @@ public class LegacyVersionDatabase extends VersionDatabase {
 
 	public List<MavenBuildVersion> getLoader() {
 		return loader.stream().filter(LegacyVersionDatabase::isPublicLoaderVersion).collect(Collectors.toList());
+	}
+
+	private LegacyManifestDump manifestDump;
+
+	@Override
+	public LegacyDbDump createLegacyDbDump() {
+		if (manifestDump == null) {
+			var list = launcherMeta.getVersions().stream().map(v -> new LegacyManifestDump.Version(v.id(), v.type(), v.url(), v.time().toString(), v.releaseTime().toString())).toList();
+			manifestDump = new LegacyManifestDump(list);
+		}
+
+		return new LFLegacyDbDump(super.createLegacyDbDump(), manifestDump);
 	}
 
 	private static boolean isPublicLoaderVersion(BaseVersion version) {

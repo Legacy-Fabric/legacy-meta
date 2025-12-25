@@ -19,7 +19,7 @@ package net.legacyfabric.meta.web;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import net.fabricmc.meta.utils.MinecraftLauncherMeta;
+import net.fabricmc.meta.FabricMeta;
 
 import net.legacyfabric.meta.utils.LWJGLVersions;
 import net.legacyfabric.meta.utils.LegacyReference;
@@ -31,7 +31,7 @@ public class ProfileHelper {
 		var versionManifest = LegacyEndpointsV2.getVersionManifest(version);
 
 		if (versionManifest != null) {
-			JsonObject manifest = MinecraftLauncherMeta.GSON.fromJson(versionManifest, JsonObject.class);
+			JsonObject manifest = FabricMeta.GSON.fromJson(versionManifest, JsonObject.class);
 
 			boolean lwjgl2Present = false;
 

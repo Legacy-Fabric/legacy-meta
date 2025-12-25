@@ -59,7 +59,7 @@ public class VersionDatabase {
 	private Map<String, GameVersionData> gameVersionIndex;
 	private List<BaseVersion> gameModels;
 	private List<MavenVersion> intermediaries;
-	private List<MavenBuildGameVersion> yarns;
+	public List<MavenBuildGameVersion> yarns;
 	public List<MavenBuildVersion> loader;
 	public List<MavenUrlVersion> installer;
 
@@ -67,8 +67,8 @@ public class VersionDatabase {
 
 	public static VersionDatabase generate(VersionDatabase database, boolean initial) throws IOException, XMLStreamException {
 		long start = System.nanoTime();
-		database.yarns = database.getMappingsParser().getMeta(MavenBuildGameVersion::new, "net.fabricmc:yarn:");
-		database.intermediaries = database.getIntermediaryParser().getMeta(MavenVersion::new, "net.fabricmc:intermediary:");
+		database.yarns = database.getMappingsParser().getMeta(MavenBuildGameVersion::new, database.getMappingsPrefix());
+		database.intermediaries = database.getIntermediaryParser().getMeta(MavenVersion::new, database.getIntermediaryPrefix());
 		database.loader = LOADER_PARSER.getMeta(MavenBuildVersion::new, "net.fabricmc:fabric-loader:", list -> {
 			for (BaseVersion version : list) {
 				if (isPublicLoaderVersion(version)) {
@@ -124,7 +124,7 @@ public class VersionDatabase {
 			if (intermediary == null && !version.obfuscated()) { // assign noop intermediaries to the per-version data and add version to intermediary list
 				intermediary = Reference.NOOP_INTERMEDIARY_VERSION;
 
-				MavenVersion versionIntermediary = new MavenVersion("net.fabricmc:intermediary:".concat(version.id()), true);
+				MavenVersion versionIntermediary = new MavenVersion(getIntermediaryPrefix().concat(version.id()), true);
 				newIntermediary.add(versionIntermediary);
 			}
 
@@ -139,6 +139,8 @@ public class VersionDatabase {
 		//Sorts in the order of minecraft release dates
 		newIntermediary.sort(Comparator.comparingInt(o -> launcherMeta.getIndex(o.getVersion())));
 		intermediaries = newIntermediary;
+
+		launcherMeta.filterVersions(intermediaries);
 	}
 
 	public GameVersionData getGameData(String version) {

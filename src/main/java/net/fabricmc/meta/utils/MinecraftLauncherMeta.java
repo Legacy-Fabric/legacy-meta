@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import net.fabricmc.meta.FabricMeta;
 import net.fabricmc.meta.data.VersionDatabase;
-
 import net.fabricmc.meta.web.models.MavenVersion;
 
 public class MinecraftLauncherMeta {
@@ -98,17 +97,19 @@ public class MinecraftLauncherMeta {
 		List<Version> ret = new ArrayList<>(parsed.versions.size());
 
 		for (MclMetaVersionManifest.Version version : parsed.versions) {
-			byte[] hash = version.sha1() != null ? HexFormat.of().parseHex(version.sha1()) : null;
+			byte[] hash = version.sha1() != null && !version.sha1().equals("null") ? HexFormat.of().parseHex(version.sha1()) : null;
 			OffsetDateTime time = OffsetDateTime.parse(version.releaseTime());
+			OffsetDateTime updatedTime = OffsetDateTime.parse(version.time());
 			boolean obfuscated = FabricMeta.MC_OBFUSCATION_CHECKER.isObfuscated(version.id(), version.url(), hash, time);
-			if (EMULATE_OLD && !obfuscated) continue;
+			if (!obfuscated) continue;
 
 			ret.add(new Version(version.id(),
 					version.type(),
 					version.url(),
 					hash,
 					time,
-					obfuscated));
+					true,
+					updatedTime));
 		}
 
 		return ret;
@@ -117,7 +118,8 @@ public class MinecraftLauncherMeta {
 	static final class MclMetaVersionManifest {
 		public List<Version> versions;
 
-		public record Version(String id, String type, String url, String releaseTime, String sha1) { }
+		public record Version(String id, String type, String url, String releaseTime, String sha1,
+							  String time) { }
 	}
 
 	public static MinecraftLauncherMeta getAllMeta(boolean allowCacheRead) throws IOException {
@@ -165,7 +167,8 @@ public class MinecraftLauncherMeta {
 		});
 	}
 
-	public record Version(String id, String type, String url, byte[] sha1, OffsetDateTime releaseTime, boolean obfuscated) {
+	public record Version(String id, String type, String url, byte[] sha1, OffsetDateTime releaseTime, boolean obfuscated,
+						  OffsetDateTime time) {
 		public boolean isStable() {
 			return type.equals("release");
 		}

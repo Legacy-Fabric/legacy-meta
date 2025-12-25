@@ -147,6 +147,7 @@ public class EndpointsV2 {
 		String path = switch (side) {
 		case "client" -> "profile";
 		case "server" -> "server";
+		case "instance" -> "instance";
 		default -> throw new IllegalArgumentException(side);
 		};
 
@@ -188,5 +189,5 @@ public class EndpointsV2 {
 		context.result(msg);
 	}
 
-	record ProfileEnvironment(GameVersionData game, MavenBuildVersion loader, String side, String ext) { }
+	public record ProfileEnvironment(GameVersionData game, MavenBuildVersion loader, String side, String ext) { }
 }

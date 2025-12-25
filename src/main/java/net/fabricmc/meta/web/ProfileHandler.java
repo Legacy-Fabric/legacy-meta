@@ -126,7 +126,7 @@ public class ProfileHandler {
 			libraries.addAll(librariesObject.get(env.side()).getAsJsonArray());
 		}
 
-		libraries.addAll(ProfileHelper.enrichProfile(info.getIntermediary().getVersion()));
+		libraries.addAll(ProfileHelper.enrichProfile(env.game().version().id()));
 
 		String currentTime = ISO_8601.format(new Date());
 

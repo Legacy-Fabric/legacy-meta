@@ -33,7 +33,6 @@ import io.javalin.http.InternalServerErrorResponse;
 import org.jetbrains.annotations.NotNull;
 
 import net.fabricmc.meta.web.EndpointsV2;
-import net.fabricmc.meta.web.models.LoaderInfoV2;
 
 import net.legacyfabric.meta.utils.IOUtils;
 import net.legacyfabric.meta.utils.LWJGLVersions;
@@ -47,11 +46,11 @@ public class MMCInstance {
 		IOUtils.emptyDir(CACHE_DIR);
 	}
 
-	private static String getZipFileName(LoaderInfoV2 infoV2) {
-		return String.format("legacyfabric-%s+loader.%s.zip", infoV2.getIntermediary().getVersion(), infoV2.getLoader().getVersion());
+	private static String getZipFileName(EndpointsV2.ProfileEnvironment env) {
+		return String.format("legacyfabric-%s+loader.%s.zip", env.game().version().id(), env.loader().getVersion());
 	}
 
-	private static CompletableFuture<InputStream> instanceZip(LoaderInfoV2 infoV2) {
+	private static CompletableFuture<InputStream> instanceZip(EndpointsV2.ProfileEnvironment infoV2) {
 		String fileName = getZipFileName(infoV2);
 		Path instanceZip = CACHE_DIR.resolve(fileName);
 
@@ -78,21 +77,21 @@ public class MMCInstance {
 		}
 	}
 
-	private static String readAndReplace(String template, LoaderInfoV2 infoV2, LWJGLVersions lwjgl) throws IOException {
+	private static String readAndReplace(String template, EndpointsV2.ProfileEnvironment infoV2, LWJGLVersions lwjgl) throws IOException {
 		try (InputStream is = MMCInstance.class.getResourceAsStream("/template/" + template)) {
 			return new String(is.readAllBytes())
-					.replace("${minecraft_version}", infoV2.getIntermediary().getVersion())
-					.replace("${loader_version}", infoV2.getLoader().getVersion())
+					.replace("${minecraft_version}", infoV2.game().version().id())
+					.replace("${loader_version}", infoV2.loader().getVersion())
 					.replace("${lwjgl_name}", lwjgl.name)
 					.replace("${lwjgl_uid}", lwjgl.uid)
 					.replace("${lwjgl_version}", lwjgl.version);
 		}
 	}
 
-	private static void generateInstanceZip(LoaderInfoV2 infoV2, Path instanceZip) throws IOException {
+	private static void generateInstanceZip(EndpointsV2.ProfileEnvironment infoV2, Path instanceZip) throws IOException {
 		Files.createDirectories(instanceZip.getParent());
 
-		var lwjgl = Objects.equals(infoV2.getIntermediary().getVersion(), "1.13.2") ? LWJGLVersions.LWJGL3 : LWJGLVersions.LWJGL2;
+		var lwjgl = Objects.equals(infoV2.game().version().id(), "1.13.2") ? LWJGLVersions.LWJGL3 : LWJGLVersions.LWJGL2;
 
 		var files = getFileEntries(infoV2, lwjgl);
 
@@ -114,7 +113,7 @@ public class MMCInstance {
 		}
 	}
 
-	private static @NotNull ArrayList<FileEntry> getFileEntries(LoaderInfoV2 infoV2, LWJGLVersions lwjgl) {
+	private static @NotNull ArrayList<FileEntry> getFileEntries(EndpointsV2.ProfileEnvironment infoV2, LWJGLVersions lwjgl) {
 		var files = new ArrayList<FileEntry>();
 
 		files.add(new FileEntry("instance.cfg"));
@@ -125,7 +124,7 @@ public class MMCInstance {
 			files.add(new FileEntry("patches/org.lwjgl.json"));
 		}
 
-		String intermediaryPatch = switch (infoV2.getIntermediary().getVersion()) {
+		String intermediaryPatch = switch (infoV2.game().version().id()) {
 		case "1.6.4" -> "patches/net.fabricmc.intermediary.pre-1.7.json";
 		case "1.5.2", "1.4.7", "1.3.2" -> "patches/net.fabricmc.intermediary.pre-1.6.json";
 		default -> "patches/net.fabricmc.intermediary.json";
